@@ -1,0 +1,83 @@
+# configuration version: https://roadrunner.dev/docs/beep-beep-config/2.x/en
+version: '2.7'
+
+server:
+  command: "php worker.php"
+  relay: "pipes"
+  relay_timeout: "20s"
+  env:
+    - XDEBUG_SESSION: ${GRPC_XDEBUG}
+
+grpc:
+  listen: ${GRPC_SERVER}
+  proto:
+    - "app/Protobuf/notification.proto"
+  # Maximum send message size
+  #
+  # This option is optional. Default value: 50 (MB)
+  max_send_msg_size: 50
+
+  # Maximum receive message size
+  #
+  # This option is optional. Default value: 50 (MB)
+  max_recv_msg_size: 50
+  # MaxConnectionIdle is a duration for the amount of time after which an
+  #	idle connection would be closed by sending a GoAway. Idleness duration is
+  #	defined since the most recent time the number of outstanding RPCs became
+  #	zero or the connection establishment.
+  #
+  # This option is optional. Default value: infinity.
+  max_connection_idle: 0s
+
+  # MaxConnectionAge is a duration for the maximum amount of time a
+  #	connection may exist before it will be closed by sending a GoAway. A
+  #	random jitter of +/-10% will be added to MaxConnectionAge to spread out
+  #	connection storms.
+  #
+  # This option is optional. Default value: infinity.
+  max_connection_age: 0s
+
+  # MaxConnectionAgeGrace is an additive period after MaxConnectionAge after
+  #	which the connection will be forcibly closed.
+  max_connection_age_grace: 0s
+
+  # MaxConnectionAgeGrace is an additive period after MaxConnectionAge after
+  #	which the connection will be forcibly closed.
+  #
+  # This option is optional: Default value: 10
+  max_concurrent_streams: 10
+
+  # After a duration of this time if the server doesn't see any activity it
+  #	pings the client to see if the transport is still alive.
+  #	If set below 1s, a minimum value of 1s will be used instead.
+  #
+  # This option is optional. Default value: 2h
+  ping_time: 1s
+
+  # After having pinged for keepalive check, the server waits for a duration
+  #	of Timeout and if no activity is seen even after that the connection is
+  #	closed.
+  #
+  # This option is optional. Default value: 20s
+  timeout: 200s
+  pool:
+    # How many worker processes will be started. Zero (or nothing) means the number of logical CPUs.
+    #
+    # Default: 0
+    num_workers: ${GRPC_WORKER_NUM_WORKERS}
+    # Maximal count of worker executions. Zero (or nothing) means no limit.
+    #
+    # Default: 0
+    max_jobs: ${GRPC_WORKER_MAX_JOBS}
+    # Timeout for worker allocation. Zero means no limit.
+    #
+    # Default: 60s
+    allocate_timeout: 60s
+    # Timeout for worker destroying before process killing. Zero means no limit.
+    #
+    # Default: 60s
+    destroy_timeout: 60
+logs:
+  #Available value : panic, error, warn, info, debug. Default: debug
+  level: ${ROAD_RUNNER_LOG_LEVEL}
+
