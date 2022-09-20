@@ -38,10 +38,10 @@ class LaravelGrpcServiceProvider extends ServiceProvider
             __DIR__ . '/../config/grpc.php' => config_path('grpc.php'),
         ], 'grpc-config');
         $this->publishes([
-            __DIR__ . '/worker.php' => base_path('workerNew.php'),
+            __DIR__ . '/worker.php' => base_path('worker.php'),
         ], 'grpc-worker');
         $this->publishes([
-            __DIR__ . '/../Providers/GrpcServiceProvider.php' => app_path('Providers/LaravelGrpcServiceProvider.php'),
+            __DIR__ . '/../Providers/GrpcServiceProvider.php' => app_path('Providers/GrpcServiceProvider.php'),
         ], 'grpc-provider');
         $this->publishes([
             __DIR__ . '/../RoadRunner/.rr.yaml' => base_path('.rr.yaml'),

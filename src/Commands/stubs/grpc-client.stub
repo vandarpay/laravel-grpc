@@ -5,6 +5,6 @@ use vandarpay\LaravelGrpc\GrpcClient;
 
 class {{class}}Client extends GrpcClient
 {
-    protected string $service = 'protobuf.services.{{class}}';
+    protected string $service = '`services.{{class}}';
 
 }

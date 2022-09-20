@@ -8,11 +8,15 @@ give you a better understanding
 
 ## Installation
 
-    composer require vandarpay/laravel-grpc
+```bash
+composer require vandarpay/laravel-grpc
+```
 
 ### Publish Necessary File
 
-    php artisan vendor:publish --provider="vandarpay\LaravelGrpc\GrpcServiceProvider"
+```bash
+php artisan vendor:publish --provider=" vandarpay\LaravelGrpc\LaravelGrpcServiceProvider"
+```
 
 ## Requirement
 
@@ -32,18 +36,12 @@ application server, load-balancer, and process manager written in Golang.
 You can also install RoadRunner automatically using command shipped with the composer package, run:
 
 ```bash
-./vendor/bin/rr-worker get-binary
+./vendor/bin/rr get-binary
 ```
 
 Server binary will be available at the root of your project.
 
 > PHP's extensions php-curl and php-zip are required to download RoadRunner automatically. PHP's extensions php-sockets need to be installed to run roadrunner. Check with php --modules your installed extensions.
-
-## Run RoadRunner Sever
-
-```bash
-./rr serve --dotenv .env
-```
 
 ## Environments
 
@@ -76,7 +74,9 @@ How many worker processes will be started. Zero (or nothing) means the number of
 
 ## Make New Service
 
-    php artisan make:service {service-name} --grpc --language=fa
+```bash
+php artisan make:service {service-name} --grpc --language=fa
+```
 
 ## Compile proto files
 
@@ -110,7 +110,12 @@ option php_namespace = "GrpcServices\\Echo\\Messages";
 option php_metadata_namespace = "GrpcServices\\Echo";
 ```
 
-Next, after installing program `protoc`, execute the following command to create the required files for connection
+### Install protobuf compiler
+```bash
+sudo apt install -y protobuf-compiler
+```
+
+Next, after installing `protoc` program, execute the following command to create the required files for connection
 
 ```bash
 protoc --proto_path=app/Protobuf --php_out=./app/Protobuf echo.proto
@@ -154,12 +159,23 @@ service as below
 $this->bindGrpc(PingRepository::class, PingService::class);
 ```
 
+## Run RoadRunner Sever
+
+```bash
+./rr serve --dotenv .env
+```
+
 # Client Side
 
 To build the communication class on the client side, first, the proto file must be compiled like the server routine, and
 the communication class must be created by the following command.
 
+```bash
+composer require vandarpay/laravel-grpc
+php artisan vendor:publish --tag=grpc-config
 ```
+
+```bash
 php artisan make:grpc-client {service name}
 ```
 
@@ -178,7 +194,14 @@ After this, the communication settings of the defined service should be placed i
 
 **Note**: The index of this setting must be equal to the service name
 
-Below is an example to better understand the JRPC client class
+In this step, transfer the proto file from the server side to the client and create the required files with the proto compiler.
+
+```bash
+protoc --proto_path=app/Protobuf --php_out=./app/Protobuf notification.proto
+```
+
+Below is an example to better understand the GRPC client class
+
 ```php
 <?php
 

@@ -18,7 +18,8 @@ class GrpcClientMakeCommand extends GeneratorCommand
 
     protected function getPath($name)
     {
-        return 'Protobuf/Clients/' . $name. 'Client.php';
+        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+        return $this->laravel['path'] . '/' . str_replace('\\', '/', $name). 'Client.php';
     }
 
     protected function getStub(): string
@@ -29,7 +30,7 @@ class GrpcClientMakeCommand extends GeneratorCommand
 
     protected function getDefaultNamespace($rootNamespace)
     {
-        return "{$rootNamespace}Protobuf\Clients" ;
+        return "{$rootNamespace}\\Protobuf\Clients" ;
     }
 
 }
